@@ -1,0 +1,7 @@
+C:\Users\dip\source\repos\exeSearch\exeSearch\bin\Debug\exeSearch.exe.config
+C:\Users\dip\source\repos\exeSearch\exeSearch\bin\Debug\exeSearch.exe
+C:\Users\dip\source\repos\exeSearch\exeSearch\bin\Debug\exeSearch.pdb
+C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.csprojResolveAssemblyReference.cache
+C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.csproj.CoreCompileInputs.cache
+C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.exe
+C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.pdb
