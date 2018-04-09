@@ -22,15 +22,25 @@ namespace exeSearch
 			oWB = (Microsoft.Office.Interop.Excel._Workbook)(oXL.Workbooks.Add(""));
 			oSheet = (Microsoft.Office.Interop.Excel._Worksheet)oWB.ActiveSheet;
 
-			string[] array = Directory.GetFiles(@"D:\f1", "*.bat",SearchOption.AllDirectories); // <-- Case-insensitive
+            
+               // string[] array 
+                 List<string> list   = new List<string>();
+                 //list.AddRange(GetFiles(@"X:\Jobs", ".bat"));
+                     
+                list= GetFiles(@"X:\Jobs", "*.bat").ToList();
+                    // list.AddRange(Directory.GetFiles(@"X:\Jobs", "*.bat", SearchOption.AllDirectories).Where(s => !s.Contains(@"X:\Jobs\SunGard_r2\Batch\Scripts\ftp\transfer")));
+                     foreach (string n in list)
+                     {
+                         Console.WriteLine(n.ToString());
+                     }
 
-			Regex rgx = new Regex(@"^(D):/.*exe");
+			Regex rgx = new Regex(@"^(D):.*exe");
 			// Display all EXE files.
 			Console.WriteLine("--- bat Files: ---");
 			int i = 1;
-			foreach (string name in array)
+			foreach (string name in list)
 			{
-				foreach (string line in File.ReadLines(name))
+                				foreach (string line in File.ReadLines(name))
 				{
 					if (rgx.IsMatch(line))
 					{
@@ -43,13 +53,42 @@ namespace exeSearch
 				}
 				
 			}
+           
 			oXL.UserControl = false;
-			oWB.SaveAs("d:\\test505.xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
+			oWB.SaveAs("H:\\final1.xls", Microsoft.Office.Interop.Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing,
 				false, false, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlNoChange,
 				Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
 
 			oWB.Close();
 			Console.ReadLine();
 		}
+
+        public static IEnumerable<string> GetFiles(string root, string searchPattern)
+        {
+            Stack<string> pending = new Stack<string>();
+            pending.Push(root);
+            while (pending.Count != 0)
+            {
+                var path = pending.Pop();
+                string[] next = null;
+                try
+                {
+                    next = Directory.GetFiles(path, searchPattern);
+                }
+                catch { }
+                if (next != null && next.Length != 0)
+                    foreach (var file in next) yield return file;
+                try
+                {
+                    if(path != @"X:\Jobs\SunGard_r2\Batch\Scripts\ftp\transfer" )
+                    {
+                    next = Directory.GetDirectories(path);
+                    foreach (var subdir in next) pending.Push(subdir);
+                    }
+                }
+                catch { }
+            }
+        }
+
 	}
 }

@@ -5,3 +5,9 @@ C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.csprojResolveA
 C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.csproj.CoreCompileInputs.cache
 C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.exe
 C:\Users\dip\source\repos\exeSearch\exeSearch\obj\Debug\exeSearch.pdb
+H:\diptangshu\search\exeSearch\exeSearch\bin\Debug\exeSearch.exe.config
+H:\diptangshu\search\exeSearch\exeSearch\obj\Debug\exeSearch.exe
+H:\diptangshu\search\exeSearch\exeSearch\obj\Debug\exeSearch.pdb
+H:\diptangshu\search\exeSearch\exeSearch\bin\Debug\exeSearch.exe
+H:\diptangshu\search\exeSearch\exeSearch\bin\Debug\exeSearch.pdb
+H:\diptangshu\search\exeSearch\exeSearch\obj\Debug\exeSearch.csprojResolveAssemblyReference.cache
