@@ -1,34 +1,61 @@
-using System;  
-using System.Security.Cryptography;  
-using System.Text;  
-   
-namespace DataEncrypterDecrypter  
-{  
-    public class CryptoEngine  
-    {  
-        public static string Encrypt(string input, string key)  
-        {  
-            byte[] inputArray = UTF8Encoding.UTF8.GetBytes(input);  
-            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();  
-            tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);  
-            tripleDES.Mode = CipherMode.ECB;  
-            tripleDES.Padding = PaddingMode.PKCS7;  
-            ICryptoTransform cTransform = tripleDES.CreateEncryptor();  
-            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);  
-            tripleDES.Clear();  
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);  
-        }  
-        public static string Decrypt(string input, string key)  
-        {  
-            byte[] inputArray = Convert.FromBase64String(input);  
-            TripleDESCryptoServiceProvider tripleDES = new TripleDESCryptoServiceProvider();  
-            tripleDES.Key = UTF8Encoding.UTF8.GetBytes(key);  
-            tripleDES.Mode = CipherMode.ECB;  
-            tripleDES.Padding = PaddingMode.PKCS7;  
-            ICryptoTransform cTransform = tripleDES.CreateDecryptor();  
-            byte[] resultArray = cTransform.TransformFinalBlock(inputArray, 0, inputArray.Length);  
-            tripleDES.Clear();   
-            return UTF8Encoding.UTF8.GetString(resultArray);  
-        }  
-    }  
-}  
+using System;
+using System.Text;
+using System.Security.Cryptography;
+using System.IO;
+using System.Linq;
+
+namespace ConsoleApp2
+{
+	class Program
+	{
+		public static string Encrypt(string clearText)
+		{
+			string EncryptionKey = "abc123";
+			byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
+			using (Aes encryptor = Aes.Create())
+			{
+				Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+				encryptor.Key = pdb.GetBytes(32);
+				encryptor.IV = pdb.GetBytes(16);
+				using (MemoryStream ms = new MemoryStream())
+				{
+					using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateEncryptor(), CryptoStreamMode.Write))
+					{
+						cs.Write(clearBytes, 0, clearBytes.Length);
+						cs.Close();
+					}
+					clearText = Convert.ToBase64String(ms.ToArray());
+				}
+			}
+			return clearText;
+		}
+		public static string Decrypt(string cipherText)
+		{
+			string EncryptionKey = "abc123";
+			cipherText = cipherText.Replace(" ", "+");
+			byte[] cipherBytes = Convert.FromBase64String(cipherText);
+			using (Aes encryptor = Aes.Create())
+			{
+				Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 0x49, 0x76, 0x61, 0x6e, 0x20, 0x4d, 0x65, 0x64, 0x76, 0x65, 0x64, 0x65, 0x76 });
+				encryptor.Key = pdb.GetBytes(32);
+				encryptor.IV = pdb.GetBytes(16);
+				using (MemoryStream ms = new MemoryStream())
+				{
+					using (CryptoStream cs = new CryptoStream(ms, encryptor.CreateDecryptor(), CryptoStreamMode.Write))
+					{
+						cs.Write(cipherBytes, 0, cipherBytes.Length);
+						cs.Close();
+					}
+					cipherText = Encoding.Unicode.GetString(ms.ToArray());
+				}
+			}
+			return cipherText;
+		}
+		static void Main(string[] args)
+		{
+
+			Console.WriteLine(Encrypt("hello"));
+			Console.ReadLine();
+		}
+	}
+}
